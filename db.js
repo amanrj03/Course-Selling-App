@@ -1,5 +1,5 @@
 const mongoose = requie("mongoose");
-mongoose.connect("mongodb+srv://amanketchum:czUdIvZ1zQnOTcZV@cluster0.nc9fzp4.mongodb.net/course-selling-app")
+
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.ObjectId;
 

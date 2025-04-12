@@ -8,4 +8,9 @@ app.use("/app/v1/user", userRouter);
 app.use("/app/v1/admin", adminRouter);
 app.use("/app/v1/course", courseRouter);
 
-app.listen(3000);
+
+async function main(){
+    await mongoose.connect("mongodb+srv://amanketchum:czUdIvZ1zQnOTcZV@cluster0.nc9fzp4.mongodb.net/course-selling-app")
+    app.listen(3000);
+}
+main();
