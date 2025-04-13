@@ -13,6 +13,6 @@ adminRouter.put("/course", function (req, res) {});
 
 adminRouter.get("/course/bulk", function (req, res) {});
 
-module.exports({
+module.exports = {
   adminRouter: adminRouter,
-});
+};
