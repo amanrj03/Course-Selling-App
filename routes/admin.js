@@ -91,9 +91,38 @@ adminRouter.post("/course", adminMiddleware, async function (req, res) {
   });
 });
 
-adminRouter.put("/course", function (req, res) {});
+adminRouter.put("/course", adminMiddleware, async function (req, res) {
+  const adminId = req.adminId;
 
-adminRouter.get("/course/bulk", function (req, res) {});
+  const { title, description, price, imageUrl, courseId} = req.body;
+
+  const course = await courseModel.updateOne({
+    _id: courseId,
+    creatorId: adminId
+  },
+    {
+    title,
+    description,
+    price,
+    imageUrl,
+  });
+
+  res.json({
+    message: "Course Created",
+    courseId: course._id
+  });
+});
+
+adminRouter.get("/course/bulk", adminMiddleware, async function (req, res) {
+  const adminId = req.adminId;
+  const courses = await courseModel.find({
+    creatorId: adminId
+  })
+  res.json({
+    message: "This is you all courses",
+    courses
+  })
+});
 
 module.exports = {
   adminRouter: adminRouter,
