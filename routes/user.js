@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { z } = require("zod");
 const jwt = require("jsonwebtoken");
 const userRouter = Router();
-const { userModel, purchaseModel } = require("../db");
+const { userModel, purchaseModel, courseModel } = require("../db");
 const {JWT_USER_SECRET} = require("../config");
 const {userMiddleware} = require("../middleware/user");
 
@@ -77,8 +77,13 @@ userRouter.get("/purchases", userMiddleware, async function (req, res) {
     userId
   });
 
+  const courseData = await courseModel.find({
+    _id: { $in: purchases.map(x => x.courseId)}
+  })
+
   res.json({
-    purchases
+    purchases,
+    courseData
   })
 
 
