@@ -1,10 +1,10 @@
-const { Router, response } = require("express");
+const { Router, user } = require("express");
 const bcrypt = require("bcrypt");
 const { z } = require("zod");
 const jwt = require("jsonwebtoken");
 const userRouter = Router();
 const { userModel } = require("../db");
-const JWT_SECRET = "ilovepavitra";
+const {JWT_USER_SECRET} = require("../config");
 
 userRouter.post("/signup", async function (req, res) {
   const requireBody = z.object({
@@ -40,23 +40,23 @@ userRouter.post("/signin", async function (req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
-    const response = await userModel.findOne({
+    const user = await userModel.findOne({
         email: email
     })
 
-    if(!response){
+    if(!user){
         res.status(403).json({
             message: "User does not exist"
         })
         return;
     }
 
-    const passwordMatch = await bcrypt.compare(password, response.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
     if(passwordMatch){
         const token = jwt.sign({
-            id: response._id.toString()
-        }, JWT_SECRET);
+            id: user._id.toString()
+        }, JWT_USER_SECRET);
         
         res.json({
             token
@@ -64,7 +64,7 @@ userRouter.post("/signin", async function (req, res) {
     }
     else{
         res.status(403).json({
-            message: "signed in"
+            message: "Incorrect credentials"
         })
     }
 });
